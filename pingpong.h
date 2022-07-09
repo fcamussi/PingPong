@@ -7,7 +7,7 @@
 
 #define BAT_SPEED 4
 #define BALL_SPEED 4
-#define CPU FALSE
+#define CPU TRUE
 
 
 

@@ -1,5 +1,5 @@
 
-CC = gcc -Wall
+CC = gcc -Wdeprecated-declarations
 CFLAGS = `pkg-config --cflags gtk+-2.0`
 LIBS = `pkg-config --libs gtk+-2.0`
 

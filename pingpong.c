@@ -8,6 +8,7 @@
 
 extern Keys keys[2];
 extern GtkWidget *drawing_area;
+extern gboolean cpu;
 
 Player players[2];
 Ball ball;
@@ -49,30 +50,69 @@ void Initialize(uint32 numplayer)
 }
 
 
+
+static void Move_Bat_Up(Player *player)
+{
+    if (player->bat_pos_y > BAT_HEIGHT / 2) // para que no se salga de la pantalla
+        player->bat_pos_y -= BAT_SPEED;
+}
+
+
+
+static void Move_Bat_Down(Player *player)
+{
+    if (player->bat_pos_y < HEIGHT - BAT_HEIGHT / 2) // para que no se salga de la pantalla
+        player->bat_pos_y += BAT_SPEED;
+}
+
+
+
+static gboolean Player_CPU_service(gpointer data)
+{
+    players[PLAYER_2].service = FALSE;
+}
+
+
+
 void Move_Bats()
 {
 	/* Movemos la paleta del player 1 */
 	if (keys[PLAYER_1].up == TRUE)
-		if (players[PLAYER_1].bat_pos_y > BAT_HEIGHT / 2)
-			players[PLAYER_1].bat_pos_y -= BAT_SPEED;
+		Move_Bat_Up(&players[PLAYER_1]);
 	if (keys[PLAYER_1].down == TRUE)
-		if (players[PLAYER_1].bat_pos_y < HEIGHT - BAT_HEIGHT / 2)
-			players[PLAYER_1].bat_pos_y += BAT_SPEED;
+        Move_Bat_Down(&players[PLAYER_1]);
 	if (keys[PLAYER_1].serve == TRUE)
 		players[PLAYER_1].service = FALSE;
 
 	/* Movemos la paleta del player 2 */
-	if (CPU == TRUE)
+	if (cpu == TRUE)
 	{
+        if (players[PLAYER_2].service == TRUE)
+        {
+          	g_timeout_add(2000, Player_CPU_service, NULL);
+            
+        }
+        if (players[PLAYER_2].bat_pos_y > ball.pos_y)
+        {
+            if (abs(players[PLAYER_2].bat_pos_y - ball.pos_y) > BAT_SPEED / 2)
+            {
+                Move_Bat_Up(&players[PLAYER_2]);
+            }
+        }
+        else
+        {
+            if (abs(players[PLAYER_2].bat_pos_y - ball.pos_y) > BAT_SPEED / 2)
+            {
+                Move_Bat_Down(&players[PLAYER_2]);
+            }
+        }
 	}
 	else
 	{
 		if (keys[PLAYER_2].up == TRUE)
-			if (players[PLAYER_2].bat_pos_y > BAT_HEIGHT / 2)
-				players[PLAYER_2].bat_pos_y -= BAT_SPEED;
+            Move_Bat_Up(&players[PLAYER_2]);
 		if (keys[PLAYER_2].down == TRUE)
-			if (players[PLAYER_2].bat_pos_y < HEIGHT - BAT_HEIGHT / 2)
-				players[PLAYER_2].bat_pos_y += BAT_SPEED;
+			Move_Bat_Down(&players[PLAYER_2]);
 		if (keys[PLAYER_2].serve == TRUE)
 			players[PLAYER_2].service = FALSE;
 	}
@@ -164,9 +204,9 @@ void Move_Ball()
 
 boolean Is_On_Bat(uint32 numplayer)
 {
-	g_print("%d %d %d\n", players[numplayer].bat_pos_y - BAT_HEIGHT / 2
+	/*g_print("%d %d %d\n", players[numplayer].bat_pos_y - BAT_HEIGHT / 2
 	        - BALL_HEIGHT / 2, ball.pos_y, players[numplayer].bat_pos_y +
-	        BAT_HEIGHT / 2 + BALL_HEIGHT / 2);
+	        BAT_HEIGHT / 2 + BALL_HEIGHT / 2);*/
 	return (players[numplayer].bat_pos_y - BAT_HEIGHT / 2
 	        - BALL_HEIGHT / 2 <= ball.pos_y &&
 	        ball.pos_y <= players[numplayer].bat_pos_y +
