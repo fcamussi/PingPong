@@ -1,6 +1,6 @@
 # Ping Pong
 
-Juego de ping pong al estilo Atari™. Este programita lo hice hace muchos años para probar la técnica de double buffering para evitar el parpadeo cuando se dibujan objetos. Y ahora aproveché y le agregué la posibilidad de jugar contra la máquina ya que antes solo se podía jugar de a dos personas.
+Juego de Ping Pong al estilo Atari™. Este programita lo hice hace muchos años para probar la técnica de double buffering para evitar el parpadeo cuando se dibujan objetos. Y ahora aproveché y le agregué la posibilidad de jugar contra la máquina ya que antes solo se podía jugar de a dos personas.
 
 La técnica de double buffering es extremadamente sencilla, consiste en dibujar lo que se va a mostrar en pantalla en un buffer, y una vez dibujado por completo, se actualiza la pantalla copiando dicho buffer a la misma. También, al mantener la "última" pantalla en un buffer se puede redibujar la misma de forma inmediata, cuando por ejemplo, ésta es solapada por otra ventana y luego descubierta, sin tener que rehacer nuevamente los cálculos.
 
